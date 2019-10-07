@@ -18,8 +18,8 @@ def input_students
 end
 
 def print_header
-puts "The students of Villains Academy"
-puts "-------------"
+  puts "The students of Villains Academy"
+  puts "-------------"
 end
 
 def print(students)
