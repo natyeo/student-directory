@@ -57,5 +57,7 @@ end
 students = input_students
 # nothing happens until we call the methods
 print_header
-print(students)
+if students.any? 
+  print(students)
+end 
 print_footer(students)
