@@ -4,30 +4,26 @@ def input_students
   # create an empty array
   students = []
   # get the first name and their personal info from the user
-  name = gets.chomp
-  puts "Please enter their date of birth"
-  dob = gets.chomp
-  puts "Please enter their country of birth"
-  country = gets.chomp
+  name = gets.delete("\n")
   puts "Please enter cohort"
-  cohort = gets.chomp.to_sym
+  cohort = gets.delete("\n").to_sym
   if cohort.empty?
     cohort = "November".to_sym 
   end 
   # while the name is not empty, repeat this code
   while !name.empty? do
     # add the student hash to the array
-    students << {name: name, cohort: cohort, dob: dob, country: country} 
-    puts "Now we have #{students.count} students"
-    # get another name and their personal info
+    students << {name: name, cohort: cohort} 
+    if students.count == 1
+      puts "Now we have 1 student"
+    else  
+      puts "Now we have #{students.count} students"
+    end 
+      # get another name and their personal info
     puts "Please enter another name"  
-    name = gets.chomp
-    puts "Please enter date of birth"
-    dob = gets.chomp
-    puts "Please enter country of birth"
-    country = gets.chomp
+    name = gets.delete("\n")
     puts "Please enter cohort"
-    cohort = gets.chomp.to_sym
+    cohort = gets.delete("\n").to_sym
   end
   # return the array of input_students
   students
