@@ -4,9 +4,9 @@ def input_students
   # create an empty array
   students = []
   # get the first name and their personal info from the user
-  name = gets.delete("\n")
+  name = gets.chomp
   puts "Please enter cohort"
-  cohort = gets.delete("\n").to_sym
+  cohort = gets.chomp.to_sym
   if cohort.empty?
     cohort = "November".to_sym 
   end 
@@ -21,9 +21,9 @@ def input_students
     end 
       # get another name and their personal info
     puts "Please enter another name"  
-    name = gets.delete("\n")
+    name = gets.chomp
     puts "Please enter cohort"
-    cohort = gets.delete("\n").to_sym
+    cohort = gets.chomp.to_sym
   end
   # return the array of input_students
   students
@@ -35,15 +35,9 @@ def print_header
 end
 
 def print(students)
-  group_by_cohort = {}
-  students.each { |student| 
-    c = student[:cohort]
-    if group_by_cohort[c] == nil
-      group_by_cohort[c] = []
-    end
-    group_by_cohort[c].push(student[:name])
-  }
-  puts group_by_cohort.to_a
+  students.each do |student|
+    puts "#{student[:name]} (#{student[:cohort]} cohort)".center(100)
+  end 
 end
 
 def print_footer(students)
@@ -54,10 +48,30 @@ def print_footer(students)
   end
 end
 
-students = input_students
-# nothing happens until we call the methods
-print_header
-if students.any? 
-  print(students)
-end 
-print_footer(students)
+def interactive_menu
+  students = []
+  loop do
+  # 1. print the menu and ask the user what to do 
+    puts "1. Input the students"
+    puts "2. Show the students"
+    puts "9. Exit"
+  # 2. read the input and save it into a variable
+    selection = gets.chomp
+  # 3. do what the user has asked
+    case selection 
+    when "1"
+      students = input_students
+    when "2"
+      print_header
+      print(students)
+      print_footer(students)
+    when "9"
+      exit # this will cause program to terminate
+    else
+      puts "I don't know what you meant, try again"
+  # 4. repeat from step 1
+    end 
+  end 
+end
+
+interactive_menu
