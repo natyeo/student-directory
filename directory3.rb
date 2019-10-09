@@ -76,23 +76,23 @@ def save_students
   if @filename.empty? 
     @filename = "students.csv"
   end 
-  file = File.open(@filename, "w")
-  @students.each do |student|
-    student_data = [student[:name], student[:cohort]]
-    csv_line = student_data.join(",")
-    file.puts csv_line
+  File.open(@filename, "w") do |file|
+    @students.each do |student|
+      student_data = [student[:name], student[:cohort]]
+      csv_line = student_data.join(",")
+      file.puts csv_line
+    end 
   end 
-  file.close
   puts "#{@students.count} students saved to #{@filename}"
 end 
 
 def load_students
-  file = File.open(@filename, "r")
-  file.readlines.each do |line|
-    name, cohort = line.chomp.split(',')
-    add_student_hash(name, cohort)
-  end 
-  file.close
+  File.open(@filename, "r") do |file|
+    file.readlines.each do |line|
+      name, cohort = line.chomp.split(',')
+      add_student_hash(name, cohort)
+    end 
+  end
   puts "loaded #{@students.count} students from #{@filename}"
 end 
 
