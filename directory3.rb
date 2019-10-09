@@ -1,5 +1,4 @@
 require 'csv'
-
 @students = [] 
 @filename = ""
 
@@ -83,9 +82,9 @@ end
 
 def load_students
   CSV.foreach(@filename) do |csv|
-      name = csv[0]
-      cohort = csv[1]
-      add_student_hash(name, cohort)
+    name = csv[0]
+    cohort = csv[1]
+    add_student_hash(name, cohort)
   end
   puts "loaded #{@students.count} students from #{@filename}"
 end 
