@@ -24,6 +24,7 @@ def process(selection)
   when "3"
     save_students
   when "4"
+    puts "loading students.."
     load_students
   when "9"
     exit 
@@ -72,6 +73,7 @@ def save_students
     file.puts csv_line
   end 
   file.close
+  puts "students saved"
 end 
 
 def load_students(filename = "students.csv")
