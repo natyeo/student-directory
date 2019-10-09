@@ -1,4 +1,5 @@
 @students = [] 
+@filename = ""
 
 def interactive_menu
   loop do
@@ -10,8 +11,8 @@ end
 def print_menu
   puts "  1. Input the students
   2. Show the students
-  3. Save the list to students.csv
-  4. Load the list from students.csv
+  3. Save the list
+  4. Load the list
   9. Exit"
 end 
 
@@ -24,7 +25,11 @@ def process(selection)
   when "3"
     save_students
   when "4"
-    puts "loading students.."
+    puts "What file would you like to load? If you enter nothing, students.csv will be loaded"
+    @filename = STDIN.gets.chomp
+    if @filename.empty? 
+      @filename = "students.csv"
+    end 
     load_students
   when "9"
     exit 
@@ -66,34 +71,41 @@ def print_student_count
 end
 
 def save_students
-  file = File.open("students.csv", "w")
+  puts "Where would you like to save to? If you enter nothing, students will be saved to students.csv"
+  @filename = STDIN.gets.chomp 
+  if @filename.empty? 
+    @filename = "students.csv"
+  end 
+  file = File.open(@filename, "w")
   @students.each do |student|
     student_data = [student[:name], student[:cohort]]
     csv_line = student_data.join(",")
     file.puts csv_line
   end 
   file.close
-  puts "students saved"
+  puts "#{@students.count} students saved to #{@filename}"
 end 
 
-def load_students(filename = "students.csv")
-  file = File.open(filename, "r")
+def load_students
+  file = File.open(@filename, "r")
   file.readlines.each do |line|
     name, cohort = line.chomp.split(',')
     add_student_hash(name, cohort)
   end 
   file.close
+  puts "loaded #{@students.count} students from #{@filename}"
 end 
 
 def startup_load_students
-  ARGV.first ? filename = ARGV.first : filename = "students.csv" 
-  if File.exists?(filename) 
-    load_students(filename)
-    puts "Loaded #{filename}"
-  else
-    puts "Sorry, #{filename} doesn't exist."
+  @filename = ARGV.first
+  if @filename.nil? 
+    @filename = "students.csv"
+  end 
+  if !File.exists?(@filename) 
+    puts "Sorry, #{@filename} doesn't exist."
     exit 
   end 
+  load_students
 end 
 
 def add_student_hash(name, cohort)
