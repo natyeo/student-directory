@@ -1,3 +1,5 @@
+require 'csv'
+
 @students = [] 
 @filename = ""
 
@@ -25,11 +27,8 @@ def process(selection)
   when "3"
     save_students
   when "4"
-    puts "What file would you like to load? If you enter nothing, students.csv will be loaded"
-    @filename = STDIN.gets.chomp
-    if @filename.empty? 
-      @filename = "students.csv"
-    end 
+    puts "What file do you wish to load?"
+    use_file 
     load_students
   when "9"
     exit 
@@ -71,27 +70,22 @@ def print_student_count
 end
 
 def save_students
-  puts "Where would you like to save to? If you enter nothing, students will be saved to students.csv"
-  @filename = STDIN.gets.chomp 
-  if @filename.empty? 
-    @filename = "students.csv"
-  end 
-  File.open(@filename, "w") do |file|
+  puts "Where would you like to save to?"
+  use_file
+  CSV.open(@filename, "w") do |csv|
     @students.each do |student|
       student_data = [student[:name], student[:cohort]]
-      csv_line = student_data.join(",")
-      file.puts csv_line
+      csv << student_data
     end 
   end 
   puts "#{@students.count} students saved to #{@filename}"
 end 
 
 def load_students
-  File.open(@filename, "r") do |file|
-    file.readlines.each do |line|
-      name, cohort = line.chomp.split(',')
+  CSV.foreach(@filename) do |csv|
+      name = csv[0]
+      cohort = csv[1]
       add_student_hash(name, cohort)
-    end 
   end
   puts "loaded #{@students.count} students from #{@filename}"
 end 
@@ -110,6 +104,14 @@ end
 
 def add_student_hash(name, cohort)
   @students << {name: name, cohort: cohort.to_sym} 
+end 
+
+def use_file
+  puts "If you enter nothing, default students.csv will be used"
+  @filename = STDIN.gets.chomp 
+  if @filename.empty? 
+    @filename = "students.csv"
+  end 
 end 
 
 startup_load_students
