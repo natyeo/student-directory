@@ -1,4 +1,4 @@
-@students = [] # an empty array accessible to all methods
+@students = [] 
 
 def interactive_menu
   loop do
@@ -8,11 +8,11 @@ def interactive_menu
 end
 
 def print_menu
-  puts "1. Input the students"
-  puts "2. Show the students"
-  puts "3. Save the list to students.csv"
-  puts "4. Load the list from students.csv"
-  puts "9. Exit"
+  puts "  1. Input the students
+  2. Show the students
+  3. Save the list to students.csv
+  4. Load the list from students.csv
+  9. Exit"
 end 
 
 def process(selection)
@@ -26,27 +26,18 @@ def process(selection)
   when "4"
     load_students
   when "9"
-    exit # this will cause the program to terminate
+    exit 
   else
     puts "I don't know what you meant, try again"
   end 
 end   
 
 def input_students
-  puts "Please enter the names of the students"
-  puts "To finish, just hit return twice"
-  # get the first name 
+  puts "Please enter the names of the students. To finish, just hit return twice"
   name = STDIN.gets.chomp
-  # while the name is not empty, repeat this code
   while !name.empty? do
-    # add the student hash to the array
     add_student_hash(name, "November")
-    if @students.count == 1
-      puts "Now we have 1 student"
-    else  
-      puts "Now we have #{@students.count} students"
-    end 
-    # get another name 
+    print_student_count
     puts "Please enter another name"  
     name = STDIN.gets.chomp
   end
@@ -55,32 +46,26 @@ end
 def show_students
   print_header
   print_student_list
-  print_footer
+  print_student_count
 end 
 
 def print_header
-  puts "The students of Villains Academy".center(100)
-  puts "-------------".center(100)
+  puts "The students of Villains Academy"
+  puts "-------------"
 end
 
 def print_student_list
   @students.each do |student|
-    puts "#{student[:name]} (#{student[:cohort]} cohort)".center(100)
+    puts "#{student[:name]} (#{student[:cohort]} cohort)"
   end 
 end
 
-def print_footer
-  if @students.count == 1
-    puts "Overall, we have #{@students.count} great student".center(100)
-  else
-    puts "Overall, we have #{@students.count} great students".center(100)
-  end
+def print_student_count
+  puts @students.count == 1 ? "We have 1 great student" : "Overall, we have #{@students.count} great students"
 end
 
 def save_students
-  # open the file for writing
   file = File.open("students.csv", "w")
-  # iterate over the array of students
   @students.each do |student|
     student_data = [student[:name], student[:cohort]]
     csv_line = student_data.join(",")
@@ -98,15 +83,14 @@ def load_students(filename = "students.csv")
   file.close
 end 
 
-def try_load_students
-  filename = ARGV.first # first argument from the command line
-  filename = "students.csv" if filename.nil? # get out of method if it isn't given
-  if File.exists?(filename) # if it exists
+def startup_load_students
+  ARGV.first ? filename = ARGV.first : filename = "students.csv" 
+  if File.exists?(filename) 
     load_students(filename)
-    puts "Loaded #{@students.count} from #{filename}"
-  else # if it doesn't exist
+    puts "Loaded #{filename}"
+  else
     puts "Sorry, #{filename} doesn't exist."
-    exit # quit the program
+    exit 
   end 
 end 
 
@@ -114,5 +98,5 @@ def add_student_hash(name, cohort)
   @students << {name: name, cohort: cohort.to_sym} 
 end 
 
-try_load_students
+startup_load_students
 interactive_menu
